@@ -11,4 +11,9 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\2c2p.domain\2c2p.domain.csproj" />
+    <ProjectReference Include="..\2c2p.persistence\2c2p.persistence.csproj" />
+  </ItemGroup>
+
 </Project>

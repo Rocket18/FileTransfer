@@ -4,6 +4,8 @@
     {
         Approved,
         Failed,
-        Finished
+        Rejected,
+        Finished,
+        Done
     }
 }

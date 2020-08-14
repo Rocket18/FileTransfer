@@ -5,5 +5,9 @@
     <RootNamespace>_2c2p.webapi</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\2c2p.application\2c2p.application.csproj" />
+  </ItemGroup>
+
 
 </Project>
