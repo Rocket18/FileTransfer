@@ -67,7 +67,6 @@ namespace _2c2p.webapi
             new DbInitializer(app).UpdateDatabase();
 
             // Insert Currency codes in table (for task purpose only)
-            // Comment this line for production or any other DB
             new DbInitializer(app).SeedEverything();
 
             if (env.IsDevelopment())

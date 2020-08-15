@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _2c2p.persistence
 {
@@ -26,7 +27,13 @@ namespace _2c2p.persistence
 
             context.Database.EnsureCreated();
 
-            InserCurrencyCodes(context);
+            var count = context.CurrencyCodes.Count();
+
+            if (count == default)
+            {
+                InserCurrencyCodes(context);
+            }
+
         }
 
 
@@ -47,7 +54,6 @@ namespace _2c2p.persistence
                  new CurrencyCode() {Code = "EUR" },
                  new CurrencyCode() { Code = "USD" }
                 };
-
 
             context.CurrencyCodes.AddRange(codes);
 
