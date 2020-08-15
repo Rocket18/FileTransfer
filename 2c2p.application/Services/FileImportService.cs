@@ -2,6 +2,7 @@
 using _2c2p.application.Enumerations;
 using _2c2p.application.Helpers;
 using _2c2p.application.Models;
+using _2c2p.domain.Entities;
 using _2c2p.domain.Models;
 using _2c2p.persistence;
 using Microsoft.AspNetCore.Http;
@@ -54,7 +55,7 @@ namespace _2c2p.application.Services
                 validationErrors.Add(_validationService.Validate(item));
             }
 
-            if (!validationErrors.All(x => !x.IsError))
+            if (validationErrors.All(x => !x.IsError))
             {
                 await InsertUpdateTransactions(model);
             }
@@ -72,6 +73,7 @@ namespace _2c2p.application.Services
 
             foreach (var item in existingTransactions)
             {
+                // automapper TODO ;)
                 var transaction = model.FirstOrDefault(x => x.Id == item.TransactionId);
 
                 item.TransactionDate = transaction.TransactionDate;
@@ -84,7 +86,18 @@ namespace _2c2p.application.Services
 
             var newTransactions = model.Where(x => !existingTransactions.Select(x => x.TransactionId).Contains(x.Id));
 
-            _context.AddRange(newTransactions);
+            foreach (var item in newTransactions)
+            {
+                var transaction = new Transaction()
+                {
+                    TransactionId = item.Id,
+                    TransactionDate = item.TransactionDate,
+                    Amount = item.Amount,
+                    CurrencyCodeId = currencyCodes.FirstOrDefault(x => x.Code == item.CurrencyCode).Id,// Posible Null ref???
+                    Status = (byte)item.Status
+                };
+                _context.Transactions.Add(transaction);
+            }
 
             await _context.SaveChangesAsync();
         }

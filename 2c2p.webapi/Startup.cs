@@ -62,7 +62,9 @@ namespace _2c2p.webapi
             // Good place to apply db migrations after application start (or u can do this in last CI/CD step)
             new DbInitializer(app).UpdateDatabase();
 
-            //new DbInitializer(app).SeedEverything();
+            // Insert Currency codes in table (for task purpose only)
+            // Comment this line for production or any other DB
+            new DbInitializer(app).SeedEverything();
 
             if (env.IsDevelopment())
             {
