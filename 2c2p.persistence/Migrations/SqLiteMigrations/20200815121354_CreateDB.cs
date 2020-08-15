@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _2c2p.persistence.Migrations.SqLiteMigrations
 {
-    public partial class InitialCreate : Migration
+    public partial class CreateDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,7 +25,9 @@ namespace _2c2p.persistence.Migrations.SqLiteMigrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    TransactionId = table.Column<string>(maxLength: 40, nullable: true),
                     CurrencyCodeId = table.Column<int>(nullable: false),
+                    Amount = table.Column<decimal>(nullable: false),
                     TransactionDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<byte>(nullable: false)
                 },
@@ -44,6 +46,12 @@ namespace _2c2p.persistence.Migrations.SqLiteMigrations
                 name: "IX_Transactions_CurrencyCodeId",
                 table: "Transactions",
                 column: "CurrencyCodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_TransactionId",
+                table: "Transactions",
+                column: "TransactionId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

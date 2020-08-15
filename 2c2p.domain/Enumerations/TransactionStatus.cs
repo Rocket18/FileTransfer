@@ -2,6 +2,7 @@
 {
     public enum TransactionStatus
     {
+        None,
         Approved,    
         Rejected,
         Done

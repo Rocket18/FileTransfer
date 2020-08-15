@@ -17,6 +17,10 @@ namespace _2c2p.webapi.Controllers
             _transactionService = transactionService;
         }
 
+        /// <summary>
+        /// Get transaction list
+        /// </summary>
+        /// <returns>List<TransactionViewModel></returns>
         [Route("list"), HttpGet]
 
         public async Task<IActionResult> List()

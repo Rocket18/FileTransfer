@@ -15,6 +15,10 @@ namespace _2c2p.persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Transaction>(entity =>
+            {
+                entity.HasIndex(e => e.TransactionId).IsUnique();
+            });
         }
     }
 }

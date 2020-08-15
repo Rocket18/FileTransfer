@@ -9,8 +9,8 @@ using _2c2p.persistence;
 namespace _2c2p.persistence.Migrations.SqLiteMigrations
 {
     [DbContext(typeof(DiBiContext))]
-    [Migration("20200814191432_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200815121354_CreateDB")]
+    partial class CreateDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +40,9 @@ namespace _2c2p.persistence.Migrations.SqLiteMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CurrencyCodeId")
                         .HasColumnType("INTEGER");
 
@@ -49,9 +52,16 @@ namespace _2c2p.persistence.Migrations.SqLiteMigrations
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(40);
+
                     b.HasKey("Id");
 
                     b.HasIndex("CurrencyCodeId");
+
+                    b.HasIndex("TransactionId")
+                        .IsUnique();
 
                     b.ToTable("Transactions");
                 });

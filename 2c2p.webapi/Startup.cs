@@ -1,6 +1,7 @@
 using _2c2p.application.Contracts;
 using _2c2p.application.Enumerations;
 using _2c2p.application.Services;
+using _2c2p.domain.Models;
 using _2c2p.infrastructure.Services;
 using _2c2p.persistence;
 using _2c2p.webapi.Configuration;
@@ -34,8 +35,11 @@ namespace _2c2p.webapi
 
             services.AddTransient<IFileImportService, FileImportService>();
 
-            services.AddTransient<IValidationService, TransactionValidationService>();
-  
+            services.AddTransient<IValidationService<TransactionModel>, TransactionValidationService>();
+
+            services.AddTransient<XmlFileService>();
+            services.AddTransient<CsvFileService>();
+
             services.AddTransient<Func<FileType, IFileService>>(serviceProvider => key =>
             {
                 switch (key)

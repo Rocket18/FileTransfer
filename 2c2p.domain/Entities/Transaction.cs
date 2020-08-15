@@ -7,9 +7,14 @@ namespace _2c2p.domain.Entities
     {
         public Guid Id { get; set; }
 
+        [MaxLength(40)]
+        public string TransactionId { get; set; }
+
         public int CurrencyCodeId { get; set; }
 
         public CurrencyCode CurrencyCode { get; set; }
+
+        public decimal Amount { get; set; }
 
         [Required]
         public DateTime TransactionDate { get; set; }

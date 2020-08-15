@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace _2c2p.webapi.Controllers
@@ -17,14 +18,25 @@ namespace _2c2p.webapi.Controllers
             _fileImportService = fileImportService;
         }
 
+        /// <summary>
+        /// Upload file with max size 1 Mb
+        /// </summary>
+        /// <param name="file">IFormFile</param>
+        /// <returns>IActionResult</returns>
         [Route("upload"), HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1048576)]
+        [RequestSizeLimit(1048576)] // for Kestrel
 
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            await _fileImportService.Import(file);
+            var result =  await _fileImportService.Import(file);
 
-            return Ok();
+            if (result.All(x => !x.IsError)) 
+            {
+                return Ok();
+            }
+
+            return BadRequest(result);
         }
-        
     }
 }

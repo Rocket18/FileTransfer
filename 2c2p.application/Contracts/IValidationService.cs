@@ -1,12 +1,9 @@
 ﻿using _2c2p.application.Models;
-using _2c2p.domain.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace _2c2p.application.Contracts
 {
-    public interface IValidationService
+    public interface IValidationService<T>
     {
-       Task<ValidationResult> Validate(List<Transaction> data);
+        ValidationResult<T> Validate(T data);
     }
 }
