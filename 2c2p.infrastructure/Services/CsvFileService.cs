@@ -1,11 +1,13 @@
 ﻿using _2c2p.application.Contracts;
 using _2c2p.domain.Entities;
 using _2c2p.domain.Models;
+using _2c2p.infrastructure.Models;
+using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace _2c2p.infrastructure.Services
@@ -21,24 +23,21 @@ namespace _2c2p.infrastructure.Services
             {
                 var csvFile = await reader.ReadToEndAsync();
 
-                string[] filelines = csvFile.Split(new string[] { "\r\n" }, StringSplitOptions.None).Skip(1).ToArray();
+                var textReader = new StringReader(csvFile);
 
-                filelines = filelines.Take(filelines.Count() - 1).ToArray();
+                var csv = new CsvReader(textReader, CultureInfo.InvariantCulture);
 
-                //          var xml = new XElement("TopElement", filelines.Select(line => new XElement("CsvItem",
-                //line.Split(',').Select((column, index) => new XElement("Column" + index, column)))));
+                csv.Configuration.HasHeaderRecord = false;
 
-                //          records = xml.Descendants("CsvItem").Select(item => new Transaction()
-                //          {
-                //              or1 = (string)item.Element("Column0"),
-                //              exitStatus = (string)item.Element("Column1"),
-                //              vendorState = (string)item.Element("Column2")
-                //          }).ToList();
+                csv.Configuration.MissingFieldFound = null;
+
+                var data = csv.GetRecords<CsvTransactionData>();
 
                 return new List<TransactionModel>();
             }
 
 
         }
+     
     }
 }

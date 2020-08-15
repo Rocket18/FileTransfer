@@ -37,7 +37,7 @@ namespace _2c2p.application.Services
 
             }
 
-            var fileType = FileHelper.GetFileType(file.ContentType);
+            var fileType = FileHelper.GetFileType(file.ContentType, file.FileName);
 
             var fileService = _importServiceResolver(fileType);
 
