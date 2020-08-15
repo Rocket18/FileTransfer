@@ -34,6 +34,7 @@ namespace _2c2p.webapi
             services.AddDbContext<DiBiContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IFileImportService, FileImportService>();
+            services.AddTransient<ITransactionService, TransactionService>();
 
             services.AddTransient<IValidationService<TransactionModel>, TransactionValidationService>();
 

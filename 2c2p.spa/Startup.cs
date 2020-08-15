@@ -1,3 +1,5 @@
+using _2c2p.mvc.Models;
+using _2c2p.mvc.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,12 @@ namespace _2c2p.mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
+            services.AddTransient<ApiProvider>();
+
+            services.Configure<CommonAppSettings>(Configuration); // Shared settings
+
             services.AddRazorPages();
         }
 

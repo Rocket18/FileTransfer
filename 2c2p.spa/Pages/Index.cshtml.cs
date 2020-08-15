@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using _2c2p.domain.Models;
+using _2c2p.mvc.Providers;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace _2c2p.mvc.Pages
 {
@@ -7,14 +11,19 @@ namespace _2c2p.mvc.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        private readonly ApiProvider _apiProvider;
+        public IList<TransactionViewModel> Transactions { get; set; }
+
+        public IndexModel(ILogger<IndexModel> logger, ApiProvider apiProvider)
         {
             _logger = logger;
+
+            _apiProvider = apiProvider;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-
+            Transactions = await _apiProvider.GetTransactions();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace _2c2p.application.Models
+﻿namespace _2c2p.domain.Models
 {
     public class TransactionViewModel
     {
@@ -6,6 +6,6 @@
 
         public string Payment { get; set; }
 
-        public string Status { get; set; }
+        public char Status { get; set; }
     }
 }
