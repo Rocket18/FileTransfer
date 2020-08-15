@@ -17,7 +17,7 @@ namespace _2c2p.webapi.Controllers
             _fileImportService = fileImportService;
         }
 
-        [Route("file/upload"), HttpPost]
+        [Route("upload"), HttpPost]
 
         public async Task<IActionResult> UploadFile(IFormFile file)
         {

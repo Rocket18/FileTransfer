@@ -3,6 +3,7 @@ using _2c2p.application.Enumerations;
 using _2c2p.application.Services;
 using _2c2p.infrastructure.Services;
 using _2c2p.persistence;
+using _2c2p.webapi.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +26,7 @@ namespace _2c2p.webapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO Uncomment and configure to accept request from other domains (for production)
-            // services.AddCors();
+            services.AddCors(options => new CorsConfiguration(Configuration).SetConfiguration(options));
 
             // P.S Never commit appSettings.json with configuration im github repo, it's unsecured
             // Better get configuration form Azure Key Vault for example
@@ -68,6 +68,8 @@ namespace _2c2p.webapi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(CorsConfiguration.CorsPolicyName);
 
             app.UseAuthorization();
 

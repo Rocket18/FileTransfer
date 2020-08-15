@@ -4,7 +4,8 @@
     ViewData["Title"] = "Upload file";
 }
 
-<form enctype="multipart/form-data" method="post">
+<form action="https://localhost:44308/api/file/upload"
+      enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;" method="post">
     <div class="alert alert-secondary" role="alert">
         Allowed formats: <b>.xml, .cvs</b> <br />
         Maximum file size : <b>1 Mb</b>
@@ -17,6 +18,37 @@
             <input name="file" type="file">
         </dd>
     </dl>
+
+
+    <div style="margin-top:15px">
+        <output name="result"></output>
+    </div>
     <input asp-page-handler="Upload" class="btn btn-primary" type="submit" value="Upload">
 </form>
 
+@section Scripts {
+
+    <script>
+        async function AJAXSubmit(oFormElement) {
+            debugger;
+            var resultElement = oFormElement.elements.namedItem("result");
+            const formData = new FormData(oFormElement);
+
+            try {
+                const response = await fetch(oFormElement.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    window.location.href = '/';
+                }
+                debugger;
+                resultElement.value = 'Result: ' + response.status + ' ' +
+                    response.statusText;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+} 
