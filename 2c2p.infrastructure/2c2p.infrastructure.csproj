@@ -14,8 +14,4 @@
     <ProjectReference Include="..\2c2p.application\2c2p.application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>

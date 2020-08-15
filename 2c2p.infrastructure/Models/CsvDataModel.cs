@@ -9,7 +9,7 @@ namespace _2c2p.infrastructure.Models
         public string Id { get; set; }
 
         [Index(1)]
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Index(2)]
         public string CurrencyCode { get; set; }
