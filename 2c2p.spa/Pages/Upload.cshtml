@@ -1,0 +1,22 @@
+﻿@page
+@model _2c2p.mvc.Pages.UploadModel
+@{
+    ViewData["Title"] = "Upload file";
+}
+
+<form enctype="multipart/form-data" method="post">
+    <div class="alert alert-secondary" role="alert">
+        Allowed formats: <b>.xml, .cvs</b> <br />
+        Maximum file size : <b>1 Mb</b>
+    </div>
+    <dl>
+        <dt>
+            <label for="file">Select file to upload</label>
+        </dt>
+        <dd>
+            <input name="file" type="file">
+        </dd>
+    </dl>
+    <input asp-page-handler="Upload" class="btn btn-primary" type="submit" value="Upload">
+</form>
+

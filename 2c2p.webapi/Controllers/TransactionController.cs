@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using _2c2p.application.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -9,19 +10,17 @@ namespace _2c2p.webapi.Controllers
 
     public class TransactionController : Controller
     {
+        private readonly ITransactionService _transactionService;
 
-        //[Route("list"), HttpGet]
+        public TransactionController(ITransactionService transactionService)
+        {
+            _transactionService = transactionService;
+        }
 
-        //public async Task<IActionResult> List()
-        //{
+        [Route("list"), HttpGet]
 
-        //}
+        public async Task<IActionResult> List()
+            => Ok(await _transactionService.GetAllTransactions());
 
-        //[Route("file/upload"), HttpPost]
-
-        //public async Task<IActionResult> UploadFile()
-        //{
-
-        //}
     }
 }

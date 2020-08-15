@@ -2,10 +2,8 @@
 {
     public enum TransactionStatus
     {
-        Approved,
-        Failed,
+        Approved,    
         Rejected,
-        Finished,
         Done
     }
 }
