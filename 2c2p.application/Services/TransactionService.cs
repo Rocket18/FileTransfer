@@ -1,4 +1,5 @@
 ﻿using _2c2p.application.Contracts;
+using _2c2p.application.Models;
 using _2c2p.domain.Enumerations;
 using _2c2p.domain.Models;
 using _2c2p.persistence;
@@ -21,9 +22,34 @@ namespace _2c2p.application.Services
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        public async Task<List<TransactionViewModel>> GetAllTransactions()
+        public async Task<List<TransactionViewModel>> GetAllTransactions(TransactionFilterModel filterModel)
         {
-            var model = await _context.Transactions.Include(x=>x.CurrencyCode).ToListAsync();
+            var query = _context.Transactions.Include(i => i.CurrencyCode).Select(x => x);
+
+
+            if (filterModel.Currency != default)
+            {
+                query = query.Where(x => x.CurrencyCodeId == filterModel.Currency);
+            }
+
+
+            if (filterModel.Status != TransactionStatus.None)
+            {
+                query = query.Where(x => x.Status == (byte)filterModel.Status);
+            }
+
+            if (filterModel.FromDate != default)
+            {
+                query = query.Where(x => x.TransactionDate >= filterModel.FromDate);
+            }
+
+
+            if (filterModel.ToDate != default)
+            {
+                query = query.Where(x => x.TransactionDate <= filterModel.ToDate);
+            }
+
+            var model = await query.ToListAsync();
 
             var list = new List<TransactionViewModel>();
 
@@ -33,7 +59,7 @@ namespace _2c2p.application.Services
                 {
                     Id = item.TransactionId,
                     Payment = $"{item.Amount.ToString("n2")} {item.CurrencyCode.Code}",
-                    Status  = ((TransactionStatus)Enum.ToObject(typeof(TransactionStatus), item.Status)).ToString().FirstOrDefault()
+                    Status = ((TransactionStatus)Enum.ToObject(typeof(TransactionStatus), item.Status)).ToString().FirstOrDefault()
                 });
             }
 

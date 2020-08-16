@@ -5,6 +5,7 @@ using _2c2p.domain.Models;
 using _2c2p.infrastructure.Services;
 using _2c2p.persistence;
 using _2c2p.webapi.Configuration;
+using _2c2p.webapi.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,8 @@ namespace _2c2p.webapi
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCustomExceptionHandler();
 
             app.UseSwagger();
 

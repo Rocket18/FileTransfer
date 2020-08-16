@@ -52,12 +52,20 @@ namespace _2c2p.application.Services
 
             foreach (var item in model)
             {
-                validationErrors.Add(_validationService.Validate(item));
+                var result = _validationService.Validate(item);
+                if (result.IsError) 
+                {
+                    validationErrors.Add(result);
+                }
             }
 
             if (validationErrors.All(x => !x.IsError))
             {
                 await InsertUpdateTransactions(model);
+            }
+            else 
+            {
+                // log
             }
 
             return validationErrors;

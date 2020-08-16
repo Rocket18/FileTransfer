@@ -1,4 +1,5 @@
-﻿using _2c2p.domain.Models;
+﻿using _2c2p.domain.Entities;
+using _2c2p.domain.Models;
 using _2c2p.mvc.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -16,6 +17,9 @@ namespace _2c2p.mvc.Providers
     public class ApiProvider
     {
         public const string TransactionList = "/api/transaction/list";
+        public const string CurrencyList = "/api/transaction/currency-list";
+
+        
 
         private readonly IHttpClientFactory _clientFactory;
         private readonly CommonAppSettings _settings;
@@ -26,7 +30,7 @@ namespace _2c2p.mvc.Providers
             _settings = options.Value;
         }
 
-        public async Task<List<TransactionViewModel>> GetTransactions()
+        public async Task<List<TransactionViewModel>> GetTransactions(int currency, int status, DateTime? fromDate, DateTime? toDate)
         {
             try
             {
@@ -34,7 +38,7 @@ namespace _2c2p.mvc.Providers
 
                 http.BaseAddress = new Uri(_settings.ApiUrl);
 
-                var url = $"{TransactionList}"; // + sort
+                var url = $"{TransactionList}?currency={currency}&status={status}&fromDate={fromDate}&toDate={toDate}"; 
 
                 var contentStream = await http.GetStreamAsync(url);
 
@@ -52,6 +56,32 @@ namespace _2c2p.mvc.Providers
                 return new List<TransactionViewModel>();
             }
         }
+
+        public async Task<List<CurrencyCode>> GetCurrencyList()
+        {
+            try
+            {
+                using var http = _clientFactory.CreateClient();
+
+                http.BaseAddress = new Uri(_settings.ApiUrl);
+
+                var contentStream = await http.GetStreamAsync(CurrencyList);
+
+                using var streamReader = new StreamReader(contentStream);
+
+                using var jsonReader = new JsonTextReader(streamReader);
+
+                return new JsonSerializer().Deserialize<List<CurrencyCode>>(jsonReader);
+
+            }
+            catch (Exception ex)
+            {
+                // log 
+
+                return new List<CurrencyCode>();
+            }
+        }
+
 
     }
 }
