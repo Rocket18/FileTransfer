@@ -23,11 +23,12 @@ namespace _2c2p.webapi.Extensions
                 appBuilder.Run(async context =>
                 {
                     var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                   // var logger = loggerFactory.CreateLogger("Serilog Global exception logger");
+                    var logger = loggerFactory.CreateLogger("Serilog Global exception logger");
 
-                   // logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
+                    logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
 
                     await context.Response.WriteAsync(exceptionHandlerFeature.Error.Message);
                 });

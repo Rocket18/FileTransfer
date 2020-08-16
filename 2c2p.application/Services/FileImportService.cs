@@ -7,6 +7,8 @@ using _2c2p.domain.Models;
 using _2c2p.persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +24,17 @@ namespace _2c2p.application.Services
 
         private readonly IValidationService<TransactionModel> _validationService;
 
-        public FileImportService(DiBiContext context, Func<FileType, IFileService> importServiceResolver, IValidationService<TransactionModel> validationService)
+        private readonly ILogger<FileImportService> _logger;
+
+        public FileImportService(
+            DiBiContext context, Func<FileType, IFileService> importServiceResolver, 
+            IValidationService<TransactionModel> validationService,
+            ILogger<FileImportService> logger)
         {
             _context = context;
             _importServiceResolver = importServiceResolver;
             _validationService = validationService;
+            _logger = logger;
         }
 
         public async Task<List<ValidationResult<TransactionModel>>> Import(IFormFile file)
@@ -65,7 +73,9 @@ namespace _2c2p.application.Services
             }
             else 
             {
-                // log
+                var jsonErrors = JsonConvert.SerializeObject(validationErrors);
+
+                _logger.LogError($"Validation  didn’t pass for {fileType} {Environment.NewLine} {jsonErrors}");
             }
 
             return validationErrors;
@@ -81,7 +91,6 @@ namespace _2c2p.application.Services
 
             foreach (var item in existingTransactions)
             {
-                // automapper TODO ;)
                 var transaction = model.FirstOrDefault(x => x.Id == item.TransactionId);
 
                 item.TransactionDate = transaction.TransactionDate;
@@ -101,9 +110,20 @@ namespace _2c2p.application.Services
                     TransactionId = item.Id,
                     TransactionDate = item.TransactionDate,
                     Amount = item.Amount,
-                    CurrencyCodeId = currencyCodes.FirstOrDefault(x => x.Code == item.CurrencyCode).Id,// Posible Null ref???
                     Status = (byte)item.Status
                 };
+
+                var currencyId = currencyCodes.FirstOrDefault(x => x.Code == item.CurrencyCode)?.Id;
+
+                if (currencyId == null)
+                {
+                    throw new Exception($"Unsupported currency code {item.CurrencyCode} found");
+                }
+                else 
+                {
+                    transaction.CurrencyCodeId = currencyId.Value;
+                }
+
                 _context.Transactions.Add(transaction);
             }
 

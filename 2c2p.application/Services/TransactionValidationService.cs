@@ -30,6 +30,11 @@ namespace _2c2p.application.Services
                 result.AddEmptyFieldError(nameof(transaction.CurrencyCode));
             }
 
+            if (transaction.TransactionDate == default) 
+            {
+                result.AddFieldError(nameof(transaction.TransactionDate), $"Transaction date is invalid or empty");
+            }
+
             if (transaction.Status == TransactionStatus.None)
             {
                 result.AddEmptyFieldError(nameof(transaction.Status));

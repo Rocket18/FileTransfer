@@ -13,7 +13,6 @@ namespace _2c2p.infrastructure.Services
 {
     public class XmlFileService : IFileService
     {
-        public const string DateFormat = "yyyy-MM-ddThh:mm:ss";
 
         public Task<List<TransactionModel>> ExportToModel(IFormFile file)
         {
@@ -23,16 +22,7 @@ namespace _2c2p.infrastructure.Services
 
             using (var reader = new StreamReader(file.OpenReadStream()))
             {
-                try
-                {
-                    xmlModel = (XmlDataModel)serializer.Deserialize(reader);
-
-                }
-                catch (System.Exception)
-                {
-
-                    throw;
-                }
+                xmlModel = (XmlDataModel)serializer.Deserialize(reader);
             }
 
             var transactions = new List<TransactionModel>();
@@ -45,11 +35,9 @@ namespace _2c2p.infrastructure.Services
                     Amount = item.PaymentDetails.Amount,
                     CurrencyCode = item.PaymentDetails.CurrencyCode
                 };
+                DateTime.TryParse(item.TransactionDate, out var date);
 
-                if (DateTime.TryParse(item.TransactionDate, out var dateTime))
-                {
-                    t.TransactionDate = dateTime;
-                }
+                t.TransactionDate = date;
 
                 TransactionStatus status;
 

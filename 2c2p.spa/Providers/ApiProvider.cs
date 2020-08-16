@@ -19,8 +19,6 @@ namespace _2c2p.mvc.Providers
         public const string TransactionList = "/api/transaction/list";
         public const string CurrencyList = "/api/transaction/currency-list";
 
-        
-
         private readonly IHttpClientFactory _clientFactory;
         private readonly CommonAppSettings _settings;
 
@@ -32,56 +30,35 @@ namespace _2c2p.mvc.Providers
 
         public async Task<List<TransactionViewModel>> GetTransactions(int currency, int status, DateTime? fromDate, DateTime? toDate)
         {
-            try
-            {
-                using var http = _clientFactory.CreateClient();
+            using var http = _clientFactory.CreateClient();
 
-                http.BaseAddress = new Uri(_settings.ApiUrl);
+            http.BaseAddress = new Uri(_settings.ApiUrl);
 
-                var url = $"{TransactionList}?currency={currency}&status={status}&fromDate={fromDate}&toDate={toDate}"; 
+            var url = $"{TransactionList}?currency={currency}&status={status}&fromDate={fromDate}&toDate={toDate}";
 
-                var contentStream = await http.GetStreamAsync(url);
+            var contentStream = await http.GetStreamAsync(url);
 
-                using var streamReader = new StreamReader(contentStream);
+            using var streamReader = new StreamReader(contentStream);
 
-                using var jsonReader = new JsonTextReader(streamReader);
+            using var jsonReader = new JsonTextReader(streamReader);
 
-                return new JsonSerializer().Deserialize<List<TransactionViewModel>>(jsonReader);
-
-            }
-            catch (Exception ex)
-            {
-                // log 
-
-                return new List<TransactionViewModel>();
-            }
+            return new JsonSerializer().Deserialize<List<TransactionViewModel>>(jsonReader);
         }
 
         public async Task<List<CurrencyCode>> GetCurrencyList()
         {
-            try
-            {
-                using var http = _clientFactory.CreateClient();
+            using var http = _clientFactory.CreateClient();
 
-                http.BaseAddress = new Uri(_settings.ApiUrl);
+            http.BaseAddress = new Uri(_settings.ApiUrl);
 
-                var contentStream = await http.GetStreamAsync(CurrencyList);
+            var contentStream = await http.GetStreamAsync(CurrencyList);
 
-                using var streamReader = new StreamReader(contentStream);
+            using var streamReader = new StreamReader(contentStream);
 
-                using var jsonReader = new JsonTextReader(streamReader);
+            using var jsonReader = new JsonTextReader(streamReader);
 
-                return new JsonSerializer().Deserialize<List<CurrencyCode>>(jsonReader);
+            return new JsonSerializer().Deserialize<List<CurrencyCode>>(jsonReader);
 
-            }
-            catch (Exception ex)
-            {
-                // log 
-
-                return new List<CurrencyCode>();
-            }
         }
-
-
     }
 }

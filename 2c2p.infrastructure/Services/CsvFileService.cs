@@ -32,11 +32,9 @@ namespace _2c2p.infrastructure.Services
 
                 csv.Configuration.MissingFieldFound = null;
 
-                var data = csv.GetRecords<CsvTransactionData>();
-
                 var transactions = new List<TransactionModel>();
 
-                foreach (var item in data)
+                foreach (var item in csv.GetRecords<CsvTransactionData>())
                 {
                     var t = new TransactionModel()
                     {
@@ -45,10 +43,9 @@ namespace _2c2p.infrastructure.Services
                         CurrencyCode = item.CurrencyCode
                     };
 
-                    if (DateTime.TryParse(item.TransactionDate, out var dateTime))
-                    {
-                        t.TransactionDate = dateTime;
-                    }
+                    DateTime.TryParseExact(item.TransactionDate, DateFormat, null, System.Globalization.DateTimeStyles.None, out var date);
+
+                    t.TransactionDate = date;
 
                     t.Status = StatusHelper.GetStatus(item.Status);
 

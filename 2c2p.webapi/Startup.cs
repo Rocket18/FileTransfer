@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 
 namespace _2c2p.webapi
@@ -21,9 +23,17 @@ namespace _2c2p.webapi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            Log.Logger = new LoggerConfiguration()
+                        .Enrich.FromLogContext()
+                        .MinimumLevel.Warning()
+                        .WriteTo.File("log.txt")
+                        .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }
+
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -66,9 +76,6 @@ namespace _2c2p.webapi
         {
             // Good place to apply db migrations after application start (or u can do this in last CI/CD step)
             new DbInitializer(app).UpdateDatabase();
-
-            // Insert Currency codes in table (for task purpose only)
-            new DbInitializer(app).SeedEverything();
 
             if (env.IsDevelopment())
             {

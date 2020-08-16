@@ -4,7 +4,6 @@ using _2c2p.mvc.Providers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +13,6 @@ namespace _2c2p.mvc.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
         private readonly ApiProvider _apiProvider;
         public IList<TransactionViewModel> Transactions { get; set; }
 
@@ -38,10 +35,8 @@ namespace _2c2p.mvc.Pages
 
         public List<SelectListItem> CurrencyList { get; private set; }
 
-        public IndexModel(ILogger<IndexModel> logger, ApiProvider apiProvider)
+        public IndexModel(ApiProvider apiProvider)
         {
-            _logger = logger;
-
             _apiProvider = apiProvider; 
         }
 

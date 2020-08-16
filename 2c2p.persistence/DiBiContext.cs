@@ -19,6 +19,13 @@ namespace _2c2p.persistence
             {
                 entity.HasIndex(e => e.TransactionId).IsUnique();
             });
+
+            modelBuilder.Entity<CurrencyCode>().HasData(
+                 new CurrencyCode() { Id = 1, Code = "EUR" },
+                 new CurrencyCode() { Id = 2, Code = "USD" },
+                 new CurrencyCode() { Id = 3, Code = "AUD" }
+                 //...
+            );
         }
     }
 }
